@@ -1,0 +1,9 @@
+airflow:
+    webserver:
+        base_url: http://localhost:8080
+        web_server_host: localhost
+        web_server_port: 8080
+env:
+    - .env
+project:
+    name: rem-stock-monitoring
