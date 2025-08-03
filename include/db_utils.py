@@ -1,5 +1,5 @@
 from airflow.hooks.base import BaseHook
-from sqlalchemy import create_engine, inspect, MetaData, Table, Column, Integer, String, Float, Date
+from sqlalchemy import create_engine, inspect, MetaData, Table, Column, Integer, String, Float, Date, UniqueConstraint
 from sqlalchemy.dialects.postgresql import insert
 from datetime import datetime
 
@@ -46,7 +46,7 @@ def create_news_table_in_db(news_data):
         Column('author', String),
         Column('title', String),
         Column('description', String),
-        Column('url', String),
+        Column('url', String, primary_key=True),
         Column('publishedAt', String),
         Column('content', String)
     )
@@ -96,13 +96,13 @@ def parse_news_data(news_data):
         })
         return records
 
-def update_table(records, table_name, only_latest=False):
+def update_stocks_table(records, only_latest=False):
     conn = BaseHook.get_connection("pg_conn")
     uri = conn.get_uri().replace("postgres://", "postgresql://")
     engine = create_engine(uri)
 
     meta = MetaData()
-    stock_data_table = Table(table_name, meta, autoload_with=engine)
+    stock_data_table = Table('MP_stock_prices', meta, autoload_with=engine)
 
     data_to_insert = records[-1:] if only_latest else records
 
@@ -112,3 +112,18 @@ def update_table(records, table_name, only_latest=False):
             stmt = stmt.on_conflict_do_nothing(index_elements=['date'])
             conn.execute(stmt)
 
+def update_articles_table(records, only_latest=False):
+    conn = BaseHook.get_connection("pg_conn")
+    uri = conn.get_uri().replace("postgres://", "postgresql://")
+    engine = create_engine(uri)
+
+    meta = MetaData()
+    stock_data_table = Table('news_table', meta, autoload_with=engine)
+
+    data_to_insert = records[-1:] if only_latest else records
+
+    with engine.connect() as conn:
+        for record in data_to_insert:
+            stmt = insert(stock_data_table).values(**record)
+            stmt = stmt.on_conflict_do_nothing(index_elements=['url'])
+            conn.execute(stmt)

@@ -4,7 +4,7 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
 from pendulum import datetime, duration
 from include.data_importer import fetch_stock_API, fetch_news_API
-from include.db_utils import check_if_table_exists, create_stock_data_table_in_db, parse_stock_data, update_table, parse_news_data, create_news_table_in_db
+from include.db_utils import check_if_table_exists, create_stock_data_table_in_db, parse_stock_data, update_stocks_table, parse_news_data, create_news_table_in_db, update_articles_table
 
 
 
@@ -58,7 +58,7 @@ def rem_stock_sentiment():
         @task 
         def update_stock_table(stock_data):
             records = parse_stock_data(stock_data)
-            update_table(records, "MP_stock_prices", only_latest=True)
+            update_stocks_table(records, only_latest=True)
 
         @task
         def create_stock_data_table(stock_data):
@@ -82,7 +82,6 @@ def rem_stock_sentiment():
 
     @task_group(group_id="news_table")
     def news_table(news_data):
-            # 1. Funkcja sprawdzająca – co zwrócić
             def decide_table_path(news_data):
                 table_name = "news_table" 
                 table_exists = check_if_table_exists(table_name)
@@ -91,7 +90,7 @@ def rem_stock_sentiment():
                 else:
                     return "news_table.create_news_table"
 
-            # 2. Branch operator (zwykły sposób)
+
             branch = BranchPythonOperator(
                 task_id="check_if_table_exists",
                 python_callable=decide_table_path,
@@ -102,7 +101,7 @@ def rem_stock_sentiment():
             def update_news_table(news_data):
                 print("Update the table...")
                 records = parse_news_data(news_data)
-                update_table(records, "news_table", only_latest=True)
+                update_articles_table(records,  only_latest=True)
 
 
             @task
@@ -110,7 +109,7 @@ def rem_stock_sentiment():
                 create_news_table_in_db(news_data)
 
             join = EmptyOperator(task_id="join_news_table",
-                                 trigger_rule="none_failed_min_one_success")
+                                trigger_rule="none_failed_min_one_success")
 
             news_created = create_news_table(news_data)
             news_updated = update_news_table(news_data)
