@@ -12,3 +12,4 @@ airflow.db
 pgdata/
 include/setup_connections.py
 dags/setup_connections_dag.py
+README.md
