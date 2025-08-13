@@ -48,7 +48,7 @@ def fetch_news_API():
         raise ValueError("News API key is missing")
     
     #define variables
-    q = '"MP Materials" OR "rare earth" OR "rare-earth elements" OR "rare-earth" OR "MP NYSE" OR "critical minerals" OR "critical elements" OR "rare earth mining" OR "rare earth metals" OR "MP stock"' 
+    q = '"MP Materials" OR "rare earth" OR "MP" OR "rare-earth elements" OR "rare-earth" OR "MP NYSE" OR "critical minerals" OR "critical elements" OR "rare earth mining" OR "rare earth metals" OR "MP stock"' 
 
 
     #build url with the parameters

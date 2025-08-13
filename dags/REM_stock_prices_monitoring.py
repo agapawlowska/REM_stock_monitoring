@@ -5,7 +5,7 @@ from airflow.operators.empty import EmptyOperator
 from pendulum import datetime, duration
 from include.data_importer import fetch_stock_API, fetch_news_API
 from include.db_utils import check_if_table_exists, create_stock_data_table_in_db, parse_stock_data, update_stocks_table, parse_news_data, create_news_table_in_db, update_articles_table
-
+#from include.sentiment_analysis import get_data_from_postgres, get_sentiment
 
 
 @dag(
@@ -120,7 +120,13 @@ def rem_stock_sentiment():
 
     @task
     def analyze_sentiment():
-        print("Analizuję sentyment...")
+        pass
+        df_news = get_data_from_postgres("news_table")
+        df_stock = get_data_from_postgres("MP_stock_prices")
+
+        news_sentiment = df_news['sentiment'] = df_news['reviewText'].apply(get_sentiment)
+
+
 
     
     @task 
