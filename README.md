@@ -10,13 +10,13 @@ Currently, the pipeline is focused on data ingestion and storage, with data anal
 
 
 The following features are planned but not yet finalized:
-- Sentiment Analysis
+- Sentiment Analysis - 
 Apply NLP-based sentiment scoring to collected news articles.
 Store sentiment results alongside price data for trend correlation.
-- Plotting
+- Plotting - 
 Generate daily and weekly visualizations of stock prices and sentiment trends.
 Use  matplotlib interactive dashboards.
-- Export to Amazon S3
+- Export to Amazon S3 - 
 Save processed datasets and plots to S3 buckets for long-term storage and external use.
 
 Tech Stack
