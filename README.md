@@ -6,6 +6,7 @@ This pipeline:
 - Fetches daily REM stock price data from a selected financial API.
 - Collects related news articles from the News API.
 - Stores raw and processed data in the local Postgres instance.
+
 Currently, the pipeline is focused on data ingestion and storage, with data analysis and export features under active development.
 
 
