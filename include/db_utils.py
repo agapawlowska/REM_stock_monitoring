@@ -127,3 +127,11 @@ def update_articles_table(records, only_latest=False):
             stmt = insert(stock_data_table).values(**record)
             stmt = stmt.on_conflict_do_nothing(index_elements=['url'])
             conn.execute(stmt)
+
+def save_to_postgres(df, table_name, if_exists="replace"):
+    conn = BaseHook.get_connection("pg_conn")
+    uri = conn.get_uri().replace("postgres://", "postgresql://")
+    engine = create_engine(uri)
+    
+    df.to_sql(table_name, engine, index=False, if_exists=if_exists)
+    engine.dispose()
