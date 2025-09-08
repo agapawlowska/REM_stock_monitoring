@@ -1,8 +1,8 @@
-REM Stock Prices Monitoring
+# REM Stock Prices Monitoring
 A data pipeline designed to monitor REM stock prices and related market news in near real-time.
 The project is built with Apache Airflow (Astro runtime) and runs inside Docker containers for portability and reproducibility.
 
-This pipeline:
+## This pipeline:
 - Fetches daily REM stock price data from a selected financial API.
 - Collects related news articles from the News API.
 - Analyses daily sentiment.
@@ -10,7 +10,7 @@ This pipeline:
 - Analyses changes in stock prices vs sentiment.
 - Plots results and saves them in S3 bucket.
 
-Tech Stack
+## Tech Stack
 - Apache Airflow (Astro Runtime) – task orchestration
 - Docker – containerised environment
 - Python – data parsing, transformations, and planned analytics
